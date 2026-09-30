@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Green Fork · Vegetarian Kitchen</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--g:#1f4d36;--on:#fff;--cr:#faf4e6;--card:#fffdf7;--ink:#22302a;--ac:#e07a2f;--mut:#65756a;--bd:#e5dcc4}
+[data-theme=dark]{--g:#7fc79c;--on:#10190f;--cr:#131b16;--card:#1b251e;--ink:#e9efe8;--ac:#f0954f;--mut:#9aab9f;--bd:#2c3a30}
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.6 Inter,system-ui,sans-serif;background:var(--cr);color:var(--ink);transition:background .3s,color .3s}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;line-height:1.2;margin:.2em 0 .4em}
+a{color:var(--g)}
+:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+.skip{position:absolute;left:-999px}.skip:focus{left:8px;top:8px;background:var(--card);padding:8px;z-index:99}
+header{position:sticky;top:0;z-index:10;background:var(--card);border-bottom:1px solid var(--bd);display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;padding:8px 14px}
+.logo{font:800 1.3rem Fraunces,Georgia,serif;color:var(--g);text-decoration:none}
+nav{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+nav a{padding:6px 12px;border-radius:99px;text-decoration:none;color:var(--ink);transition:.2s}
+nav a:hover,nav a[aria-current=page]{background:var(--g);color:var(--on)}
+.badge{background:var(--ac);color:#fff;border-radius:99px;padding:0 7px;font-size:.8rem;margin-left:4px}
+.wrap{max-width:1050px;margin:auto;padding:20px 16px}
+.hero{background:linear-gradient(135deg,#1f4d36,#2e6b4c);color:#faf4e6;text-align:center;padding:64px 16px}
+.hero h1{font-size:clamp(2rem,7vw,3.6rem)}
+.btn{background:var(--g);color:var(--on);border:0;border-radius:99px;padding:10px 20px;font:600 1rem Inter,sans-serif;cursor:pointer;text-decoration:none;display:inline-block;transition:transform .15s,opacity .2s}
+.btn:hover{transform:translateY(-2px)}.btn.sm{padding:5px 14px;font-size:.9rem}
+.btn.ac{background:var(--ac);color:#fff}.btn.ghost{background:transparent;color:var(--g);border:2px solid var(--g)}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px;transition:box-shadow .2s}
+.card:hover{box-shadow:0 6px 18px #0002}
+.dish .em{font-size:2.4rem}.dish p{color:var(--mut);margin:.2em 0;font-size:.92rem}.dish.off{opacity:.55}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:8px}
+.tag{display:inline-block;font-size:.72rem;border:1px solid var(--bd);border-radius:99px;padding:1px 8px;margin:2px 2px 0 0;color:var(--mut)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chip{border:1px solid var(--g);background:none;color:var(--g);border-radius:99px;padding:5px 14px;cursor:pointer;font:inherit}
+.chip[aria-pressed=true]{background:var(--g);color:var(--on)}
+input,select,textarea{font:inherit;padding:9px;border:1px solid var(--bd);border-radius:10px;background:var(--card);color:var(--ink);width:100%}
+label{display:block;font-weight:600;margin:10px 0 3px}
+.err{color:#c0392b;font-size:.85rem;display:block;min-height:1em}
+.inline{display:flex;gap:14px;align-items:center}.inline label{display:inline;font-weight:400}.inline input{width:auto}
+form.card{max-width:520px}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th,td{text-align:left;padding:7px;border-bottom:1px solid var(--bd)}
+.scroll{overflow-x:auto}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.stats b{font-size:1.8rem;display:block;color:var(--g)}
+.two{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.trk{display:flex;list-style:none;padding:0;gap:6px}
+.trk li{flex:1;text-align:center;padding:10px 4px;border-radius:10px;background:var(--bd);color:var(--mut);transition:.4s}
+.trk li.done{background:var(--g);color:var(--on)}
+.stars{display:inline-flex;flex-direction:row-reverse;justify-content:flex-end}
+.stars input{position:absolute;opacity:0;width:1px}
+.stars label{font-size:1.9rem;color:var(--bd);cursor:pointer;margin:0;line-height:1}
+.stars input:checked~label,.stars label:hover,.stars label:hover~label{color:var(--ac)}
+.stars input:focus-visible+label{outline:3px solid var(--ac)}
+#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:grid;gap:6px;z-index:50}
+#toast div{background:var(--g);color:var(--on);padding:10px 18px;border-radius:10px;box-shadow:0 4px 14px #0004;animation:in .3s}
+@keyframes in{from{opacity:0;transform:translateY(12px)}}
+main{animation:in .35s}
+footer{text-align:center;color:var(--mut);padding:24px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#app">Skip to content</a>
+<header>
+  <a class="logo" href="#/home">🌿 Green Fork</a>
+  <nav aria-label="Main">
+    <a href="#/home">Home</a><a href="#/menu">Menu</a><a href="#/reserve">Reserve</a>
+    <a href="#/cart">Cart<span class="badge" id="cnt">0</span></a><a href="#/admin">Admin</a>
+    <button class="chip" data-act="theme" aria-label="Toggle dark mode">🌓</button>
+  </nav>
+</header>
+<main id="app" tabindex="-1"></main>
+<footer>© Green Fork · 100% vegetarian, always fresh 🌱</footer>
+<div id="toast" aria-live="polite"></div>
+
+<script>
+/* ============ DATA: seeds & constants ============ */
+const CATS=['Starters','Mains','Desserts','Drinks'];
+const TAGS=['vegan','gluten-free','spicy',"chef's pick"];
+const TM={v:'vegan',g:'gluten-free',s:'spicy',c:"chef's pick"};
+const d=(id,cat,name,desc,price,t,emoji)=>({id,cat,name,desc,price,tags:[...t].map(k=>TM[k]),emoji,avail:true});
+const SEED_DISHES=[
+ d(1,'Starters','Crispy Cauliflower Bites','Tempura cauliflower with sriracha-honey glaze and sesame.',9,'s','🥦'),
+ d(2,'Starters','Heirloom Tomato Bruschetta','Grilled sourdough, basil pesto, balsamic pearls.',8,'v','🍅'),
+ d(3,'Starters','Roasted Beet Carpaccio','Thin beets, pistachio crumble, citrus vinaigrette.',10,'vgc','🍠'),
+ d(4,'Starters','Miso Edamame Dumplings','Pan-seared dumplings with ginger-soy dip.',9,'v','🥟'),
+ d(5,'Mains','Wild Mushroom Risotto','Creamy arborio, porcini, thyme and aged parmesan.',18,'gc','🍄'),
+ d(6,'Mains','Chickpea Tikka Masala','Slow-simmered tomato curry with basmati rice.',16,'vgs','🍛'),
+ d(7,'Mains','Grilled Halloumi Bowl','Quinoa, roasted veg, lemon-tahini drizzle.',15,'g','🥗'),
+ d(8,'Mains','Smoky Jackfruit Tacos','Three corn tortillas, chipotle jackfruit, lime slaw.',15,'vs','🌮'),
+ d(9,'Mains','Truffle Gnocchi','Potato gnocchi, brown butter sage, black truffle.',19,'c','🍝'),
+ d(10,'Mains','Stuffed Poblano','Black beans, corn, cashew crema, salsa verde.',17,'vgs','🌶️'),
+ d(11,'Desserts','Salted Caramel Tart','Buttery crust, silky caramel, sea salt.',8,'c','🥧'),
+ d(12,'Desserts','Chocolate Avocado Mousse','Rich dark cocoa, coconut cream, raspberries.',7,'vg','🍫'),
+ d(13,'Desserts','Lemon Olive Oil Cake','Moist citrus cake with whipped mascarpone.',7,'','🍋'),
+ d(14,'Desserts','Mango Sorbet','Alphonso mango, chili-lime dust.',6,'vg','🥭'),
+ d(15,'Drinks','Ginger Mint Lemonade','House-pressed, lightly sweet, very fresh.',5,'vg','🍹'),
+ d(16,'Drinks','Ceremonial Matcha Latte','Whisked matcha with oat or dairy milk.',5,'v','🍵'),
+ d(17,'Drinks','Cold-Pressed Green Juice','Cucumber, celery, apple, spinach, lemon.',6,'vg','🥬'),
+ d(18,'Drinks','Hibiscus Iced Tea','Floral, tart, naturally caffeine free.',4,'vg','🌺')];
+const SEED_REVIEWS=[
+ {id:1,name:'Maya R.',stars:5,text:'The mushroom risotto changed my mind about vegetarian food.',date:'2026-08-12'},
+ {id:2,name:'Tom H.',stars:5,text:'Warm service and the tikka masala is unreal. Booking again.',date:'2026-08-30'},
+ {id:3,name:'Lena K.',stars:4,text:'Beautiful room, brilliant desserts. Get the salted caramel tart.',date:'2026-09-10'}];
+const HOURS=[['Mon – Thu','11:00 – 21:00'],['Fri – Sat','11:00 – 23:00'],['Sunday','10:00 – 20:00']];
+const SLOTS=['12:00','13:00','14:00','17:00','18:00','19:00','20:00','21:00'];
+const MAX_TABLES=4,TAX=0.08,STATUSES=['Received','Preparing','Ready'],ADMIN_PW='admin123';
+
+/* ============ API: mock backend (swap bodies for fetch() later) ============ */
+const mem={};
+const db={
+  get(k,def){try{const v=localStorage.getItem('gf_'+k);return v?JSON.parse(v):(k in mem?mem[k]:def)}catch(e){return k in mem?mem[k]:def}},
+  set(k,v){mem[k]=v;try{localStorage.setItem('gf_'+k,JSON.stringify(v))}catch(e){}}
+};
+const wait=()=>new Promise(r=>setTimeout(r,40));
+const api={
+  async init(){if(!db.get('seeded')){db.set('dishes',SEED_DISHES);db.set('reviews',SEED_REVIEWS);db.set('orders',[]);db.set('res',[]);db.set('seeded',1)}},
+  async getMenu(){await wait();return db.get('dishes',[])},
+  async saveDish(x){await wait();const l=db.get('dishes',[]);
+    if(x.id){const i=l.findIndex(o=>o.id==x.id);l[i]={...l[i],...x}}
+    else l.push({...x,id:Math.max(0,...l.map(o=>o.id))+1});
+    db.set('dishes',l)},
+  async deleteDish(id){await wait();db.set('dishes',db.get('dishes',[]).filter(o=>o.id!=id))},
+  async getOrders(){await wait();return db.get('orders',[])},
+  async createOrder(o){await wait();const l=db.get('orders',[]);
+    const n={...o,id:Date.now(),num:'GF-'+(1001+l.length),status:'Received',created:new Date().toISOString()};
+    l.push(n);db.set('orders',l);return n},
+  async updateOrder(id,status){await wait();const l=db.get('orders',[]);l.find(o=>o.id==id).status=status;db.set('orders',l)},
+  async getReservations(){await wait();return db.get('res',[])},
+  async createReservation(r){await wait();const l=db.get('res',[]);
+    if(l.filter(x=>x.date===r.date&&x.time===r.time&&x.status==='confirmed').length>=MAX_TABLES)
+      throw new Error('Sorry, that slot is fully booked. Please pick another.');
+    const n={...r,id:Date.now(),code:'RSV-'+Math.random().toString(36).slice(2,6).toUpperCase(),status:'confirmed'};
+    l.push(n);db.set('res',l);return n},
+  async cancelReservation(id){await wait();const l=db.get('res',[]);l.find(x=>x.id==id).status='cancelled';db.set('res',l)},
+  async getReviews(){await wait();return db.get('reviews',[])},
+  async addReview(r){await wait();const l=db.get('reviews',[]);l.unshift({...r,id:Date.now(),date:today()});db.set('reviews',l)},
+  async login(pw){await wait();return pw===ADMIN_PW}
+};
+
+/* ============ STATE ============ */
+const state={cart:db.get('cart',{}),cat:'All',tags:new Set(),q:'',admin:false,last:db.get('last',null),tip:0.1,
+  theme:db.get('theme',matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light')};
+const $=s=>document.querySelector(s);
+const m=n=>'$'+Number(n).toFixed(2);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function today(){return new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10)}
+function toast(msg){const t=document.createElement('div');t.textContent=msg;$('#toast').append(t);setTimeout(()=>t.remove(),3000)}
+function saveCart(){db.set('cart',state.cart);$('#cnt').textContent=Object.values(state.cart).reduce((a,b)=>a+b,0)}
+function applyTheme(){document.documentElement.dataset.theme=state.theme;db.set('theme',state.theme)}
+
+/* ============ VIEWS ============ */
+const card=x=>`<article class="card dish${x.avail?'':' off'}"><div class="em" aria-hidden="true">${x.emoji}</div><h3>${esc(x.name)}</h3><p>${esc(x.desc)}</p>
+<div>${x.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+<div class="row"><b>${m(x.price)}</b>${x.avail?`<button class="btn sm" data-act="add" data-id="${x.id}" aria-label="Add ${esc(x.name)} to cart">Add +</button>`:'<span class="tag">Sold out</span>'}</div></article>`;
+const stars=n=>'★'.repeat(n)+'☆'.repeat(5-n);
+const tracker=o=>`<ol class="trk" aria-label="Order status: ${o.status}">${STATUSES.map((s,i)=>`<li class="${i<=STATUSES.indexOf(o.status)?'done':''}">${['📥','👩‍🍳','✅'][i]}<br>${s}</li>`).join('')}</ol>`;
+
+const VIEWS={
+async home(){
+  const [menu,rev]=await Promise.all([api.getMenu(),api.getReviews()]);
+  return `<section class="hero"><h1>Good food, grown kindly.</h1><p>Seasonal, 100% vegetarian cooking in the heart of town.</p>
+  <a class="btn ac" href="#/menu">Order Now</a> <a class="btn ghost" style="color:#faf4e6;border-color:#faf4e6" href="#/reserve">Book a Table</a></section>
+  <div class="wrap"><h2>Our story &amp; values</h2><div class="grid">
+  <div class="card"><h3>🌱 Local first</h3><p>Produce from farms within 50 miles, picked in season.</p></div>
+  <div class="card"><h3>♻️ Zero waste</h3><p>Peels become stocks, scraps become compost.</p></div>
+  <div class="card"><h3>💚 For everyone</h3><p>Vegan and gluten-free options on every course.</p></div></div>
+  <h2 style="margin-top:28px">Chef's specials</h2><div class="grid">${menu.filter(x=>x.tags.includes("chef's pick")&&x.avail).map(card).join('')}</div>
+  <h2 style="margin-top:28px">What guests say</h2>
+  <div class="two"><div>${rev.slice(0,4).map(r=>`<blockquote class="card" style="margin:0 0 10px"><span style="color:var(--ac)" aria-label="${r.stars} of 5 stars">${stars(r.stars)}</span><p style="margin:.2em 0">${esc(r.text)}</p><small>— ${esc(r.name)}, ${r.date}</small></blockquote>`).join('')}</div>
+  <form class="card" data-form="review" novalidate><h3>Leave a review</h3>
+   <label for="rn">Your name</label><input id="rn" name="nm"><span class="err" id="e-nm"></span>
+   <fieldset style="border:0;padding:0;margin:8px 0"><legend>Rating</legend><span class="stars">
+   ${[5,4,3,2,1].map(i=>`<input type="radio" name="stars" id="s${i}" value="${i}"><label for="s${i}" title="${i} stars"><span class="sr" style="position:absolute;left:-999px">${i} stars</span>★</label>`).join('')}</span><span class="err" id="e-stars"></span></fieldset>
+   <label for="rt">Your review</label><textarea id="rt" name="text" rows="3"></textarea><span class="err" id="e-text"></span>
+   <button class="btn">Submit review</button></form></div>
+  <div class="two" style="margin-top:28px"><section class="card"><h2>Opening hours</h2><table>${HOURS.map(h=>`<tr><th scope="row">${h[0]}</th><td>${h[1]}</td></tr>`).join('')}</table></section>
+  <section class="card"><h2>Contact</h2><p>📍 42 Orchard Lane, Greenfield<br>📞 <a href="tel:+15550142000">(555) 014-2000</a><br>✉️ <a href="mailto:hello@greenfork.example">hello@greenfork.example</a></p></section></div></div>`;
+},
+async menu(){
+  return `<div class="wrap"><h1>Our menu</h1>
+  <label for="q">Search dishes</label><input id="q" type="search" placeholder="Try “mushroom”…" value="${esc(state.q)}">
+  <div class="chips" role="group" aria-label="Category">${['All',...CATS].map(c=>`<button class="chip" data-act="cat" data-v="${c}" aria-pressed="${state.cat===c}">${c}</button>`).join('')}</div>
+  <div class="chips" role="group" aria-label="Dietary filters">${TAGS.map(t=>`<button class="chip" data-act="tag" data-v="${t}" aria-pressed="${state.tags.has(t)}">${t}</button>`).join('')}</div>
+  <div class="grid" id="grid" aria-live="polite"></div></div>`;
+},
+async cart(){
+  const menu=await api.getMenu();
+  const lines=Object.entries(state.cart).map(([id,q])=>({x:menu.find(o=>o.id==id),q})).filter(l=>l.x);
+  const sub=lines.reduce((a,l)=>a+l.x.price*l.q,0),tax=sub*TAX,tip=sub*state.tip;
+  let out='<div class="wrap"><h1>Your order</h1>';
+  if(state.last)out+=`<section class="card" style="margin-bottom:16px"><h2>Order ${state.last.num} confirmed 🎉</h2><p>Thanks, ${esc(state.last.name)}! ${state.last.type==='dine-in'?'Dine-in':'Takeaway'} · Total ${m(state.last.total)}</p><div id="trk">${tracker(state.last)}</div></section>`;
+  if(!lines.length)return out+`<p>Your cart is empty. <a href="#/menu">Browse the menu →</a></p></div>`;
+  return out+`<div class="two"><section class="card"><table><caption class="sr" style="position:absolute;left:-999px">Cart items</caption>
+  ${lines.map(l=>`<tr><td>${l.x.emoji} ${esc(l.x.name)}</td><td><button class="btn sm" data-act="dec" data-id="${l.x.id}" aria-label="Decrease ${esc(l.x.name)}">−</button> ${l.q} <button class="btn sm" data-act="inc" data-id="${l.x.id}" aria-label="Increase ${esc(l.x.name)}">+</button></td><td>${m(l.x.price*l.q)}</td><td><button class="chip" data-act="rm" data-id="${l.x.id}" aria-label="Remove ${esc(l.x.name)}">✕</button></td></tr>`).join('')}</table>
+  <p>Subtotal: <b>${m(sub)}</b><br>Tax (8%): ${m(tax)}<br>
+  <label for="tip">Tip</label><select id="tip" data-act="tip">${[0,.1,.15,.2].map(t=>`<option value="${t}" ${t===state.tip?'selected':''}>${t*100}% (${m(sub*t)})</option>`).join('')}</select></p>
+  <h3>Total: ${m(sub+tax+tip)}</h3></section>
+  <form class="card" data-form="checkout" novalidate><h2>Checkout</h2>
+  <label for="cn">Name</label><input id="cn" name="nm" autocomplete="name"><span class="err" id="e-nm"></span>
+  <label for="cp">Phone</label><input id="cp" name="ph" type="tel" autocomplete="tel"><span class="err" id="e-ph"></span>
+  <fieldset style="border:0;padding:0"><legend>Order type</legend><div class="inline"><span><input type="radio" name="type" id="t1" value="dine-in" checked> <label for="t1">Dine-in</label></span><span><input type="radio" name="type" id="t2" value="takeaway"> <label for="t2">Takeaway</label></span></div></fieldset>
+  <button class="btn ac" style="margin-top:12px">Place order · ${m(sub+tax+tip)}</button></form></div></div>`;
+},
+async reserve(){
+  return `<div class="wrap"><h1>Reserve a table</h1><div id="rconf"></div>
+  <form class="card" data-form="reserve" novalidate><p>We have ${MAX_TABLES} tables per time slot.</p>
+  <label for="rnm">Name</label><input id="rnm" name="nm"><span class="err" id="e-nm"></span>
+  <label for="rph">Phone</label><input id="rph" name="ph" type="tel"><span class="err" id="e-ph"></span>
+  <label for="rdate">Date</label><input id="rdate" name="date" type="date" min="${today()}" value="${today()}"><span class="err" id="e-date"></span>
+  <label for="rtime">Time slot</label><select id="rtime" name="time"></select><span class="err" id="e-time"></span>
+  <label for="rg">Guests</label><select id="rg" name="guests">${[1,2,3,4,5,6,7,8].map(n=>`<option>${n}</option>`).join('')}</select>
+  <button class="btn ac" style="margin-top:12px">Confirm reservation</button></form></div>`;
+},
+async admin(){
+  if(!state.admin)return `<div class="wrap"><h1>Admin login</h1><form class="card" data-form="login"><label for="pw">Password</label><input id="pw" type="password" name="pw" autocomplete="current-password"><span class="err" id="e-pw"></span><button class="btn" style="margin-top:10px">Sign in</button></form></div>`;
+  const [menu,ord,res]=await Promise.all([api.getMenu(),api.getOrders(),api.getReservations()]);
+  const rev=ord.reduce((a,o)=>a+o.total,0),rt=res.filter(r=>r.date===today()&&r.status==='confirmed').length;
+  return `<div class="wrap"><div class="row"><h1>Dashboard</h1><button class="btn ghost sm" data-act="logout">Log out</button></div>
+  <div class="stats"><div class="card"><b>${ord.length}</b>Total orders</div><div class="card"><b>${m(rev)}</b>Revenue</div><div class="card"><b>${rt}</b>Reservations today</div></div>
+  <h2>Dishes</h2><form class="card" data-form="dish" id="dishForm" style="max-width:none" novalidate><input type="hidden" name="id">
+  <div class="two"><div><label for="dn">Name</label><input id="dn" name="name"><span class="err" id="e-name"></span>
+  <label for="dc">Category</label><select id="dc" name="cat">${CATS.map(c=>`<option>${c}</option>`).join('')}</select>
+  <label for="dp">Price ($)</label><input id="dp" name="price" type="number" step="0.5" min="0"><span class="err" id="e-price"></span></div>
+  <div><label for="de">Emoji</label><input id="de" name="emoji" maxlength="4" value="🍽️"><label for="dd">Description</label><textarea id="dd" name="desc" rows="3"></textarea>
+  <div class="inline" style="flex-wrap:wrap">${TAGS.map((t,i)=>`<span><input type="checkbox" name="tags" id="tg${i}" value="${t}"> <label for="tg${i}">${t}</label></span>`).join('')}</div></div></div>
+  <button class="btn" style="margin-top:10px">Save dish</button> <button class="btn ghost" type="reset">Clear</button></form>
+  <div class="scroll"><table><tr><th>Dish</th><th>Category</th><th>Price</th><th>Status</th><th>Actions</th></tr>
+  ${menu.map(x=>`<tr><td>${x.emoji} ${esc(x.name)}</td><td>${x.cat}</td><td>${m(x.price)}</td><td>${x.avail?'Available':'Hidden'}</td>
+  <td><button class="chip" data-act="edit" data-id="${x.id}">Edit</button> <button class="chip" data-act="togd" data-id="${x.id}">${x.avail?'Mark sold out':'Mark available'}</button> <button class="chip" data-act="del" data-id="${x.id}">Delete</button></td></tr>`).join('')}</table></div>
+  <h2>Orders</h2><div class="scroll"><table><tr><th>#</th><th>Customer</th><th>Items</th><th>Type</th><th>Total</th><th>Status</th></tr>
+  ${ord.slice().reverse().map(o=>`<tr><td>${o.num}</td><td>${esc(o.name)}<br><small>${esc(o.phone)}</small></td><td>${o.items.map(i=>i.qty+'× '+esc(i.name)).join(', ')}</td><td>${o.type}</td><td>${m(o.total)}</td>
+  <td><select data-act="ostatus" data-id="${o.id}" aria-label="Status for ${o.num}">${STATUSES.map(s=>`<option ${s===o.status?'selected':''}>${s}</option>`).join('')}</select></td></tr>`).join('')||'<tr><td colspan="6">No orders yet.</td></tr>'}</table></div>
+  <h2>Reservations</h2><div class="scroll"><table><tr><th>Code</th><th>Guest</th><th>Date</th><th>Time</th><th>Guests</th><th>Status</th><th></th></tr>
+  ${res.slice().sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)).map(r=>`<tr><td>${r.code}</td><td>${esc(r.name)}<br><small>${esc(r.phone)}</small></td><td>${r.date}</td><td>${r.time}</td><td>${r.guests}</td><td>${r.status}</td>
+  <td>${r.status==='confirmed'?`<button class="chip" data-act="cres" data-id="${r.id}">Cancel</button>`:''}</td></tr>`).join('')||'<tr><td colspan="7">No reservations yet.</td></tr>'}</table></div></div>`;
+}};
+
+/* Partial redraws (keeps input focus) */
+async function drawGrid(){
+  const menu=await api.getMenu(),q=state.q.toLowerCase();
+  const l=menu.filter(x=>(state.cat==='All'||x.cat===state.cat)&&[...state.tags].every(t=>x.tags.includes(t))&&(x.name+' '+x.desc).toLowerCase().includes(q));
+  $('#grid').innerHTML=l.length?l.map(card).join(''):'<p>No dishes match your filters.</p>';
+}
+async function fillSlots(){
+  const date=$('#rdate').value,res=await api.getReservations(),sel=$('#rtime');
+  sel.innerHTML=SLOTS.map(t=>{const left=MAX_TABLES-res.filter(r=>r.date===date&&r.time===t&&r.status==='confirmed').length;
+    return `<option value="${t}" ${left<=0?'disabled':''}>${t} ${left<=0?'(full)':'('+left+' left)'}</option>`}).join('');
+}
+const AFTER={menu:drawGrid,reserve:fillSlots};
+
+async function render(){
+  const r=location.hash.slice(2)||'home',key=VIEWS[r]?r:'home';
+  $('#app').innerHTML=await VIEWS[key]();
+  document.querySelectorAll('nav a').forEach(a=>a.getAttribute('href')==='#/'+key?a.setAttribute('aria-current','page'):a.removeAttribute('aria-current'));
+  if(AFTER[key])await AFTER[key]();
+  saveCart();window.scrollTo(0,0);
+}
+
+/* ============ EVENTS ============ */
+function fail(map){let bad=false;document.querySelectorAll('.err').forEach(e=>e.textContent='');
+  for(const k in map){const el=$('#e-'+k);if(el)el.textContent=map[k];bad=true}return bad}
+const PH=/^[\d\s()+-]{7,}$/;
+
+document.addEventListener('click',async e=>{
+  const b=e.target.closest('[data-act]');if(!b||b.tagName==='SELECT')return;
+  const a=b.dataset.act,id=b.dataset.id,v=b.dataset.v;
+  if(a==='theme'){state.theme=state.theme==='dark'?'light':'dark';applyTheme()}
+  else if(a==='add'){state.cart[id]=(state.cart[id]||0)+1;saveCart();toast('Added to cart 🛒')}
+  else if(['inc','dec','rm'].includes(a)){
+    state.cart[id]=a==='inc'?state.cart[id]+1:a==='dec'?state.cart[id]-1:0;
+    if(state.cart[id]<=0)delete state.cart[id];saveCart();render()}
+  else if(a==='cat'){state.cat=v;render()}
+  else if(a==='tag'){state.tags.has(v)?state.tags.delete(v):state.tags.add(v);render()}
+  else if(a==='logout'){state.admin=false;render()}
+  else if(a==='edit'){const x=(await api.getMenu()).find(o=>o.id==id),f=$('#dishForm');
+    f.id.value=x.id;f.name.value=x.name;f.cat.value=x.cat;f.price.value=x.price;f.emoji.value=x.emoji;f.desc.value=x.desc;
+    f.querySelectorAll('[name=tags]').forEach(c=>c.checked=x.tags.includes(c.value));f.name.focus();f.scrollIntoView({behavior:'smooth'})}
+  else if(a==='togd'){const x=(await api.getMenu()).find(o=>o.id==id);await api.saveDish({id,avail:!x.avail});toast('Availability updated');render()}
+  else if(a==='del'){if(confirm('Delete this dish permanently?')){await api.deleteDish(id);delete state.cart[id];toast('Dish deleted');render()}}
+  else if(a==='cres'){await api.cancelReservation(id);toast('Reservation cancelled');render()}
+});
+
+document.addEventListener('change',async e=>{
+  const t=e.target;
+  if(t.dataset.act==='tip'){state.tip=+t.value;render()}
+  else if(t.dataset.act==='ostatus'){await api.updateOrder(t.dataset.id,t.value);toast('Order status updated')}
+  else if(t.id==='rdate')fillSlots();
+});
+document.addEventListener('input',e=>{if(e.target.id==='q'){state.q=e.target.value;drawGrid()}});
+
+document.addEventListener('submit',async e=>{
+  const f=e.target,kind=f.dataset.form;if(!kind)return;e.preventDefault();
+  const fd=Object.fromEntries(new FormData(f)),er={};
+  try{
+  if(kind==='review'){
+    if(!fd.nm.trim())er.nm='Please enter your name.';
+    if(!fd.stars)er.stars='Choose a star rating.';
+    if(fd.text.trim().length<5)er.text='Write at least a few words.';
+    if(fail(er))return;
+    await api.addReview({name:fd.nm.trim(),stars:+fd.stars,text:fd.text.trim()});toast('Thanks for your review! ⭐');render();
+  }else if(kind==='checkout'){
+    if(fd.nm.trim().length<2)er.nm='Please enter your name.';
+    if(!PH.test(fd.ph.trim()))er.ph='Enter a valid phone number.';
+    if(fail(er))return;
+    const menu=await api.getMenu();
+    const items=Object.entries(state.cart).map(([id,q])=>{const x=menu.find(o=>o.id==id);return x&&{name:x.name,qty:q,price:x.price}}).filter(Boolean);
+    const sub=items.reduce((a,i)=>a+i.price*i.qty,0);
+    const o=await api.createOrder({name:fd.nm.trim(),phone:fd.ph.trim(),type:fd.type,items,subtotal:sub,tax:sub*TAX,tip:sub*state.tip,total:sub*(1+TAX+state.tip)});
+    state.cart={};state.last=o;db.set('last',o);saveCart();toast('Order '+o.num+' placed!');render();
+  }else if(kind==='reserve'){
+    if(fd.nm.trim().length<2)er.nm='Please enter your name.';
+    if(!PH.test(fd.ph.trim()))er.ph='Enter a valid phone number.';
+    if(!fd.date||fd.date<today())er.date='Choose today or a future date.';
+    if(!fd.time)er.time='No slot available for this date.';
+    if(fail(er))return;
+    const r=await api.createReservation({name:fd.nm.trim(),phone:fd.ph.trim(),date:fd.date,time:fd.time,guests:+fd.guests});
+    f.hidden=true;$('#rconf').innerHTML=`<section class="card" role="status"><h2>You're booked! 🎉</h2><p>${esc(r.name)}, table for ${r.guests} on <b>${r.date}</b> at <b>${r.time}</b>.<br>Confirmation code: <b>${r.code}</b></p><a class="btn" href="#/home">Back home</a></section>`;
+    toast('Reservation confirmed');
+  }else if(kind==='login'){
+    if(await api.login(fd.pw)){state.admin=true;toast('Welcome back, admin');render()}
+    else fail({pw:'Incorrect password.'});
+  }else if(kind==='dish'){
+    if(!fd.name.trim())er.name='Name is required.';
+    if(!(+fd.price>0))er.price='Enter a price above 0.';
+    if(fail(er))return;
+    await api.saveDish({id:fd.id||undefined,name:fd.name.trim(),cat:fd.cat,price:+fd.price,emoji:fd.emoji||'🍽️',desc:fd.desc.trim(),
+      tags:[...f.querySelectorAll('[name=tags]:checked')].map(c=>c.value),...(fd.id?{}:{avail:true})});
+    toast('Dish saved ✔');render();
+  }
+  }catch(err){toast(err.message);if(kind==='reserve')fillSlots()}
+});
+
+/* Live order tracker: polls the API while the cart view is open */
+setInterval(async()=>{
+  if(!state.last||!$('#trk'))return;
+  const o=(await api.getOrders()).find(x=>x.id===state.last.id);
+  if(o){state.last=o;db.set('last',o);$('#trk').innerHTML=tracker(o)}
+},2000);
+
+window.addEventListener('hashchange',render);
+applyTheme();
+api.init().then(()=>{if(!location.hash)location.hash='#/home';else render();saveCart()});
+</script>
+</body>
+</html>
